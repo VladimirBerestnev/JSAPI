@@ -41,7 +41,7 @@
                 const currentEl = document.createElement('p');
                 let currentNumber = parseInt(element.current);
                 //              currentEl.textContent = 'Осталось: ' + currentNumber;
-                currentEl.innerHTML = `<p><b>Осталось:</b> ${currentNumber}`
+                currentEl.innerHTML = `<p><b>Записалось:</b> ${currentNumber}`
 
                 const buttonChange = document.createElement('button');
                 buttonChange.classList.add('btn', 'btn-primary');
@@ -65,13 +65,13 @@
                         buttonChange.textContent = 'Отменить запись';
                         status = true;
                         // currentEl.textContent = 'Осталось: ' + (currentNumber + 1);
-                        currentEl.innerHTML = `<p><b>Осталось:</b> ${currentNumber + 1}`
+                        currentEl.innerHTML = `<p><b>Записалось:</b> ${currentNumber + 1}`
 
                     } else {
                         buttonChange.textContent = 'Записаться';
                         status = false;
                         //currentEl.textContent = 'Осталось: ' + (currentNumber);
-                        currentEl.innerHTML = `<p><b>Осталось:</b> ${currentNumber}`
+                        currentEl.innerHTML = `<p><b>Записалось:</b> ${currentNumber}`
                     }
                 }
             });

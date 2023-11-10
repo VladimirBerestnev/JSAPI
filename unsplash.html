@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+
+    <style>
+        .photobox {
+            text-align: center;
+        }
+
+        .photoimg {
+            max-height: 500px;
+            box-shadow: 1px 1px 10px 1px blue;
+        }
+    </style>
+
+    <div class="photobox"></div>
+
+
+    <script>
+
+        const photobox = document.querySelector('.photobox');
+
+        async function fetchPhoto() {
+            try {
+                const response = await fetch('https://api.unsplash.com/photos/random/?client_id=n2ip5M6MjGOyWCPZyAeGKZvkJhQ2dZXrpENPNSwCmxs');
+                const photo = await response.json();
+                console.log(response.ok);
+                console.log(response.status);
+                return photo;
+            } catch (error) {
+                console.error('Что-то пошло не так:', error);
+                return error;
+            }
+        }
+
+        async function loadPhoto() {
+            const photo = await fetchPhoto();
+
+            const img = document.createElement('img');
+            img.src = photo.urls.small;
+            img.alt = photo.alt_description;
+            img.classList.add('photoimg');
+
+            const photoText = document.createElement('p');
+            photoText.textContent = `Фотограф: ${photo.user.name}`
+
+            const photoLike = document.createElement('p');
+            photoLike.textContent = `Like: ${photo.likes}`
+
+            const linkImg = document.createElement('img');
+            linkImg.src = 'like1.jpg';
+            linkImg.setAttribute('style', 'cursor: pointer; width: 150px');
+
+            photobox.append(img);
+            photobox.append(photoText);
+            photobox.append(photoLike);
+            photobox.append(linkImg);
+
+            function addLike() {
+                photo.likes = parseInt(photo.likes + 1);
+                photoLike.textContent = `Like: ${photo.likes}`;
+                linkImg.removeEventListener('click', addLike);
+            }
+
+            linkImg.addEventListener('click', addLike);
+
+        }
+        loadPhoto();
+
+
+
+
+    </script>
+</body>
+
+</html>

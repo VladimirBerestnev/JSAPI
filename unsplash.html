@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Unsplash Photo</title>
 
 </head>
 
@@ -16,16 +16,17 @@
         }
 
         .photoimg {
-            max-height: 500px;
+            max-height: 450px;
             box-shadow: 1px 1px 10px 1px blue;
         }
     </style>
 
     <div class="photobox"></div>
 
-
     <script>
 
+        let photoList = JSON.parse(localStorage.getItem('photoList')) || [];
+        let length = photoList.length;
         const photobox = document.querySelector('.photobox');
 
         async function fetchPhoto() {
@@ -44,22 +45,24 @@
         async function loadPhoto() {
             const photo = await fetchPhoto();
 
-            const img = document.createElement('img');
-            img.src = photo.urls.small;
-            img.alt = photo.alt_description;
-            img.classList.add('photoimg');
+            const photoimg = document.createElement('img');
+            photoimg.src = photo.urls.small;
+            photoimg.alt = photo.alt_description;
+            photoimg.classList.add('photoimg');
 
             const photoText = document.createElement('p');
             photoText.textContent = `Фотограф: ${photo.user.name}`
+            photoText.classList.add('photograph');
 
             const photoLike = document.createElement('p');
             photoLike.textContent = `Like: ${photo.likes}`
+            photoLike.classList.add('photolike');
 
             const linkImg = document.createElement('img');
             linkImg.src = 'like1.jpg';
-            linkImg.setAttribute('style', 'cursor: pointer; width: 150px');
+            linkImg.setAttribute('style', 'cursor: pointer; width: 100px');
 
-            photobox.append(img);
+            photobox.append(photoimg);
             photobox.append(photoText);
             photobox.append(photoLike);
             photobox.append(linkImg);
@@ -72,11 +75,45 @@
 
             linkImg.addEventListener('click', addLike);
 
+            const photoItem = { 'photoimg': photo.urls.small, 'photoText': photo.user.name, 'photoLike': photo.likes };
+            photoList.push(photoItem);
+
+            localStorage.setItem('photoList', JSON.stringify(photoList));
+
+            const photoLast = document.createElement('p');
+            photoLast.textContent = 'Ранее';
+            photoLast.setAttribute('style', 'color: blue; cursor:pointer');
+            photoLast.classList.add('photolast');
+            console.log(length);
+            if (length === 0) {
+                photoLast.style.display = 'none';
+            }
+
+            photoLast.addEventListener('click', lastImg);
+            photobox.append(photoLast);
+
         }
         loadPhoto();
 
+        function lastImg() {
 
+            const photoLast = document.querySelector('.photolast');
+            length = length - 1;
+            if (length === 0) {
+                photoLast.style.display = 'none';
+            }
 
+            const photoimg = document.querySelector('.photoimg');
+            photoimg.src = photoList[length].photoimg;
+            photoimg.alt = photoList[length].alt_description;
+
+            const photoText = document.querySelector('.photograph');
+            photoText.textContent = `Фотограф: ${photoList[length].photoText}`
+
+            const photoLike = document.querySelector('.photolike');
+            photoLike.textContent = `Like: ${photoList[length].photoLike}`;
+
+        }
 
     </script>
 </body>
